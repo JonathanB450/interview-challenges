@@ -16,7 +16,6 @@ function App() {
 
   function handleToggle(id: Item["id"]) {
     const index = items.findIndex(i => i.id === id)
-    console.log(index);
     let newItems = [...items]
     newItems[index].completed = !newItems[index].completed
     setItems(newItems)
@@ -26,11 +25,18 @@ function App() {
   function handleAdd(event: React.ChangeEvent<Form>) {
     event.preventDefault();
     if(inputValue.current.value != ''){
-      setItems([...items, {
-          id: +new Date(),
-          completed: false,
-          text: inputValue.current.value,
-      }])
+      // setItems([...items, {
+      //     id: +new Date(),
+      //     completed: false,
+      //     text: inputValue.current.value,
+      // }])
+      setItems(
+      items.concat({
+        id: +new Date(),
+        completed: false,
+        text: event.target.text.value,
+      }),
+    );
     }
     inputValue.current.value = "";
   }
