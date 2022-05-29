@@ -1,6 +1,6 @@
 import type {Item} from "./types";
 
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 
 import styles from "./App.module.scss";
 import api from "./api";
@@ -10,25 +10,29 @@ interface Form extends HTMLFormElement {
 }
 
 function App() {
+  const inputValue = useRef('')
   const [items, setItems] = useState<Item[]>([]);
   const [isLoading, toggleLoading] = useState<boolean>(true);
 
   function handleToggle(id: Item["id"]) {
-    // Should implement
+    const index = items.findIndex(i => i.id === id)
+    console.log(index);
+    let newItems = [...items]
+    newItems[index].completed = !newItems[index].completed
+    setItems(newItems)
+    
   }
 
   function handleAdd(event: React.ChangeEvent<Form>) {
     event.preventDefault();
-
-    setItems((items) =>
-      items.concat({
-        id: +new Date(),
-        completed: false,
-        text: event.target.text.value,
-      }),
-    );
-
-    event.target.text.value = "";
+    if(inputValue.current.value != ''){
+      setItems([...items, {
+          id: +new Date(),
+          completed: false,
+          text: inputValue.current.value,
+      }])
+    }
+    inputValue.current.value = "";
   }
 
   function handleRemove(id: Item["id"]) {
@@ -48,7 +52,7 @@ function App() {
     <main className={styles.main}>
       <h1>Supermarket list</h1>
       <form onSubmit={handleAdd}>
-        <input name="text" type="text" />
+        <input ref={inputValue} name="text" type="text" />
         <button>Add</button>
       </form>
       <ul>
@@ -56,9 +60,9 @@ function App() {
           <li
             key={item.id}
             className={item.completed ? styles.completed : ""}
-            onClick={() => handleToggle(item.id)}
+            
           >
-            {item.text} <button onClick={() => handleRemove(item.id)}>[X]</button>
+            <span onClick={() => handleToggle(item.id)}>{item.text}</span> <button onClick={() => handleRemove(item.id)}>[X]</button>
           </li>
         ))}
       </ul>

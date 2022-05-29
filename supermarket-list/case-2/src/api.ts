@@ -2,7 +2,9 @@ import {Item} from "./types";
 
 export default {
   list: (): Promise<Item[]> =>
-    Promise.resolve([
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve([
       {
         id: 1,
         text: "Some thing to buy",
@@ -17,6 +19,8 @@ export default {
         id: 3,
         text: "Some last to buy",
         completed: false,
-      },
-    ]),
+      }
+    ])
+    }, 1000);
+  })
 };

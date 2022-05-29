@@ -22,7 +22,7 @@ function App() {
   async function handleAdd(event: React.ChangeEvent<Form>) {
     event.preventDefault()
     const dataItem = {
-      id: items.length + 1,
+      id: items[items.length - 1].id + 1,
       text: textValue.current.value,
       completed:false
     }
@@ -51,9 +51,8 @@ function App() {
           <li
             key={item.id}
             className={item.completed ? styles.completed : ""}
-            onClick={() => handleToggle(item.id)}
           >
-            {item.text} <button onClick={() => handleRemove(item.id)}>[X]</button>
+            <span onClick={() => handleToggle(item.id)}>{item.text}</span> <button onClick={() => handleRemove(item.id)}>[X]</button>
           </li>
         ))}
       </ul>
